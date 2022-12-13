@@ -1,4 +1,4 @@
-const isProd = true;
+const isProd = false;
 
 interface TreeNode<T> {
     content: T
@@ -6,53 +6,28 @@ interface TreeNode<T> {
     right?: TreeNode<T>
 }
 
-function inOrder<T>(array: Array<TreeNode<T>>) {
+
+
+function inOrder<T>(root: TreeNode<T>) {
     // Step 1 Creates an empty stack: S = NULL
     var stack:Array<TreeNode<T>> = [];
 
     // Step 2 sets current as address of root: current -> 1
-    var current = array[0];
-    !isProd && console.log(`[DEBUG] pushing ${current.content}`);
-    stack.push(current);
+    var current: TreeNode<T> | undefined = root;
 
-    // Step 3 Pushes the current node and set current = current->left 
-    //        until current is NULL
-    //      current -> 1
-    //      push 1: Stack S -> 1
-    //      current -> 2
-    //      push 2: Stack S -> 2, 1
-    //      current -> 4
-    //      push 4: Stack S -> 4, 2, 1
-    //      current = NULL
-    while ((!!current.left) && (current = current.left)) {
-        !isProd && console.log(`[DEBUG] pushing ${current.content}`);
-        stack.push(current);
-    }
 
-    // Step 4 pops from S
-    //      a) Pop 4: Stack S -> 2, 1
-    //      b) print "4"
-    //      c) current = NULL /*right of 4 */ and go to step 3
-    // Since current is NULL step 3 doesn't do anything. 
-    //
-    // Step 4 pops again.
-    //      a) Pop 2: Stack S -> 1
-    //      b) print "2"
-    //      c) current -> 5/*right of 2 */ and go to step 3
-    var temp = undefined;
-    while ((!!(temp = stack.pop())) && (current = temp)) {
-        !isProd && console.log(`[DEBUG] popping ${current.content}`);
-
-        if (!!current.right) {
-            current = current.right;
-            !isProd && console.log(`[DEBUG] right ${current.content}`);
-            console.log(`[PROD] ${current.content}`);
+    while (!!current || stack.length > 0) {
+        if (!!current) {
+            stack.push(current);
+            current = current.left;
+        } else {
+            let temp = stack.pop();
+            if (!!temp) {
+                console.log(temp.content);
+                current = temp.right;
+            }
         }
     }
-
-    console.log(`finally stack.length must be zero? = ${stack.length === 0}`);
-
-
 
 
 
@@ -116,7 +91,7 @@ arrayA[0].right = arrayA[2];
 arrayA[1].left = arrayA[3];
 arrayA[1].right = arrayA[4];
 
-inOrder(arrayA);
+inOrder(arrayA[0]);
 
 
 
@@ -160,6 +135,4 @@ arrayB[1].right = arrayB[4];
 arrayB[2].left = arrayB[5];
 arrayB[2].right = arrayB[6];
 
-inOrder(arrayB);
-
-
+inOrder(arrayB[0]);
