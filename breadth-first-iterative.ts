@@ -88,7 +88,7 @@ console.log(`breadthBinaryFirstSearch: ${breadthBinaryFirstSearch(arrayA[0]).map
 
 interface TreeNodeWithChildren<T> {
     content: T
-    children?: Array<TreeNode<T>>
+    children?: Array<TreeNodeWithChildren<T>>
 }
 
 
